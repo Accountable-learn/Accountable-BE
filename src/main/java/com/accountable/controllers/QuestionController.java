@@ -8,14 +8,28 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("api/v1")
+@RequestMapping("api")
 public class QuestionController {
+  private final QuestionService questionService;
 
-    private final QuestionService questionService;
+  @GetMapping(path = "/question")
+  public ResponseEntity<Question> getRandQuestion() {
+    return ResponseEntity.ok(questionService.getRandQuestion());
+  }
 
+  @PostMapping(path = "/question")
+  public ResponseEntity<Question> createQuestion(@RequestBody Question question) {
+    return ResponseEntity.ok(questionService.create(question));
+  }
 
-    @GetMapping(path = "/question")
-    public Question getRandQuestion() {
-        return questionService.getRandQuestion();
-    }
+  //  @PatchMapping(path = "/question/{id}")
+  //  public Question createQuestion(@PathVariable UUID uuid) {
+  //    return questionService.update(uuid);
+  //  }
+
+  // TODO: REMOVE THIS (only for testing purpose)
+  @GetMapping(path = "/question/testing")
+  public String testingFunction() {
+    return "This is a question for you!";
+  }
 }
