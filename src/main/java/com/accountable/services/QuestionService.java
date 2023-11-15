@@ -1,8 +1,9 @@
 package com.accountable.services;
 
 import com.accountable.entity.Question;
+import com.accountable.exception.ErrorCode;
+import com.accountable.exception.GenericException;
 import com.accountable.repositories.QuestionRepository;
-import java.io.InvalidObjectException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,13 +19,8 @@ public class QuestionService {
   }
 
   public Question create(Question question) {
-    //    // TODO: Figure out how to handle exception with error code
-    try {
-      if (question.getQuestionText().isBlank()) {
-        throw new InvalidObjectException("Question text cannot be empty");
-      }
-    } catch (Exception e) {
-      log.info("Question text cannot be empty");
+    if (question.getQuestionText().isBlank()) {
+      throw new GenericException(ErrorCode.QUESTION_ON_ADD, "Cannot have empty question");
     }
 
     question.setIsActive(Boolean.TRUE);
