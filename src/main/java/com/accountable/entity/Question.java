@@ -1,19 +1,16 @@
 package com.accountable.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
 
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
+@Table(name = Question.TABLE_NAME)
 public class Question {
   // TODO: Extends AbstractUuidEntity class
   public static final String TABLE_NAME = "questions";
@@ -22,8 +19,7 @@ public class Question {
   public static final String IS_ACTIVE = "is_active";
 
   @Id
-  @GeneratedValue(generator = "UUID")
-  @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+  @GeneratedValue(strategy = GenerationType.UUID)
   @Column(
       name = Question.ID_COL_NAME,
       updatable = false,
