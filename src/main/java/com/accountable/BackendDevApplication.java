@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = "com.accountable.repositories")
+@EnableJpaRepositories(basePackages = "com.accountable.repository")
 @EntityScan(basePackages = "com.accountable.entity")
 public class BackendDevApplication {
   public static void main(String[] args) {

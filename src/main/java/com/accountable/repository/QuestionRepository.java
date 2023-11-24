@@ -1,4 +1,4 @@
-package com.accountable.repositories;
+package com.accountable.repository;
 
 import com.accountable.entity.Question;
 import java.util.UUID;

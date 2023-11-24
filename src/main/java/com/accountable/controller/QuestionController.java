@@ -1,7 +1,7 @@
-package com.accountable.controllers;
+package com.accountable.controller;
 
 import com.accountable.entity.Question;
-import com.accountable.services.QuestionService;
+import com.accountable.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("api")
 public class QuestionController {
+  // TODO: Create custom response to include data for FE, return a response entity (status code,
+  // data...)  rather than just the object
   private final QuestionService questionService;
 
   @GetMapping(path = "/question")

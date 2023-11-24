@@ -1,9 +1,9 @@
-package com.accountable.services;
+package com.accountable.service;
 
 import com.accountable.entity.Question;
 import com.accountable.exception.ErrorCode;
 import com.accountable.exception.GenericException;
-import com.accountable.repositories.QuestionRepository;
+import com.accountable.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
