@@ -1,13 +1,10 @@
 package com.accountable.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
+
 import java.util.UUID;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.GenericGenerator;
 
 @SuperBuilder
 @Getter
@@ -18,8 +15,11 @@ import org.hibernate.annotations.GenericGenerator;
 @MappedSuperclass
 public abstract class AbstractUuidEntity {
   @Id
-  @Column(updatable = false, nullable = false, columnDefinition = "uuid default uuid_generate_v4()")
-  @GeneratedValue(generator = "UUID")
-  @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-  protected UUID id;
+  @GeneratedValue(strategy = GenerationType.UUID)
+  @Column(
+          name = Question.ID_COL_NAME,
+          updatable = false,
+          nullable = false,
+          columnDefinition = "uuid default uuid_generate_v4()")
+  private UUID id;
 }
