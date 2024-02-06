@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = Question.TABLE_NAME)
-public class Question extends AbstractUuidEntity  {
+public class Question extends AbstractUuidEntity {
   // TODO: Extends AbstractUuidEntity class
   public static final String TABLE_NAME = "questions";
   public static final String ID_COL_NAME = "question_uuid";

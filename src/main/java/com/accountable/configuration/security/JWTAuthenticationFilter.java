@@ -1,54 +1,72 @@
 package com.accountable.configuration.security;
 
-
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.auth0.jwt.interfaces.RSAKeyProvider;
+import com.accountable.entity.User;
+import com.accountable.repository.UserRepository;
+import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.jwk.source.JWKSource;
+import com.nimbusds.jose.jwk.source.RemoteJWKSet;
+import com.nimbusds.jose.proc.JWSVerificationKeySelector;
+import com.nimbusds.jose.proc.SecurityContext;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.proc.ConfigurableJWTProcessor;
+import com.nimbusds.jwt.proc.DefaultJWTProcessor;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import java.io.IOException;
+import java.net.URL;
+import java.text.ParseException;
+import java.util.UUID;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.naming.AuthenticationException;
-import java.io.IOException;
-
-
-@AllArgsConstructor
+// https://stackoverflow.com/questions/48356287/is-there-any-java-example-of-verification-of-jwt-for-aws-cognito-api
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
-    private final RSAKeyProvider keyProvider;
-    @Override
-    @SneakyThrows
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
-        String token = getJWTFromRequest(request);
-        Algorithm algorithm = Algorithm.RSA256(keyProvider);
-        JWTVerifier jwtVerifier = JWT.require(algorithm).build();
-        if (null != token){
-            DecodedJWT decodedJWT = jwtVerifier.verify(token);
-            if (null != decodedJWT){
-                filterChain.doFilter(request, response);
-            }
-        }
-        else{
-            throw new AuthenticationException("Authentication failed");
-        }
-    }
+  @Value("${com.accountable.aws.pubKey}")
+  private String JWKS_URL;
 
-    // Retrieve token from the header
-    private String getJWTFromRequest(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
-        }
-        return null;
+  private UserRepository userRepo;
+
+  @Override
+  @SneakyThrows
+  protected void doFilterInternal(
+      HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+      throws ServletException, IOException {
+
+    String header = request.getHeader("Authorization");
+
+    if (header != null && header.startsWith("Bearer ")) {
+      String token = header.substring(7); // Extract the token
+      try {
+        JWKSource<SecurityContext> keySource = new RemoteJWKSet<>(new URL(JWKS_URL));
+        ConfigurableJWTProcessor<SecurityContext> processor = new DefaultJWTProcessor<>();
+        JWSVerificationKeySelector<SecurityContext> keySelector =
+            new JWSVerificationKeySelector<>(JWSAlgorithm.RS256, keySource);
+        processor.setJWSKeySelector(keySelector);
+
+        SecurityContext ctx = null; // Context not needed here
+        JWTClaimsSet claimsSet = processor.process(token, ctx);
+        convertJwtToAuthToken(claimsSet);
+        filterChain.doFilter(request, response);
+      } catch (Exception e) {
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+      }
+    } else {
+      response.sendError(
+          HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: No Bearer token present");
     }
+  }
+
+  private Authentication convertJwtToAuthToken(JWTClaimsSet claimsSet) throws ParseException {
+    UUID userId = UUID.fromString(claimsSet.getSubject());
+    User user = userRepo.getUserById(userId);
+    Authentication auth = new UsernamePasswordAuthenticationToken(user.getFirstname(), null);
+    SecurityContextHolder.getContext().setAuthentication(auth);
+    return auth;
+  }
 }

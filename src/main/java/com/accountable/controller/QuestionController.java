@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("api")
-@CrossOrigin(origins = "http://localhost:3000")
+@RequestMapping("/api/")
 public class QuestionController {
   // TODO: Create custom response to include data for FE, return a response entity (status code,
   // data...)  rather than just the object
@@ -30,9 +29,8 @@ public class QuestionController {
   //    return questionService.update(uuid);
   //  }
 
-
   // TODO: REMOVE THIS (only for testing purpose)
-  @GetMapping(path = "/api/question/testing")
+  @GetMapping(path = "question/testing")
   public String testingFunction() {
     return "This is a question for you!";
   }
