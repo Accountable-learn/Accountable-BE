@@ -14,12 +14,12 @@ public class QuestionController {
   // data...)  rather than just the object
   private final QuestionService questionService;
 
-  @GetMapping(path = "/question")
+  @GetMapping(path = "question")
   public ResponseEntity<Question> getRandQuestion() {
     return ResponseEntity.ok(questionService.getRandQuestion());
   }
 
-  @PostMapping(path = "/question")
+  @PostMapping(path = "question")
   public ResponseEntity<Question> createQuestion(@RequestBody Question question) {
     return ResponseEntity.ok(questionService.create(question));
   }
@@ -31,7 +31,7 @@ public class QuestionController {
 
   // TODO: REMOVE THIS (only for testing purpose)
   @GetMapping(path = "question/testing")
-  public String testingFunction() {
-    return "This is a question for you!";
+  public ResponseEntity<String> testingFunction() {
+    return ResponseEntity.ok("this is a question for you");
   }
 }

@@ -18,6 +18,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.UUID;
+
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,12 +28,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+
 // https://stackoverflow.com/questions/48356287/is-there-any-java-example-of-verification-of-jwt-for-aws-cognito-api
+
+@RequiredArgsConstructor
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
   @Value("${com.accountable.aws.pubKey}")
   private String JWKS_URL;
 
-  private UserRepository userRepo;
+  private final UserRepository userRepo;
 
   @Override
   @SneakyThrows
@@ -62,11 +68,10 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     }
   }
 
-  private Authentication convertJwtToAuthToken(JWTClaimsSet claimsSet) throws ParseException {
+  private void convertJwtToAuthToken(JWTClaimsSet claimsSet) throws ParseException {
     UUID userId = UUID.fromString(claimsSet.getSubject());
-    User user = userRepo.getUserById(userId);
-    Authentication auth = new UsernamePasswordAuthenticationToken(user.getFirstname(), null);
+    User user = userRepo.findUserByIdAndIsActiveTrue(userId);
+    Authentication auth = new UsernamePasswordAuthenticationToken(user, null);
     SecurityContextHolder.getContext().setAuthentication(auth);
-    return auth;
   }
 }
