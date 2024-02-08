@@ -1,7 +1,6 @@
 package com.accountable.entity;
 
 import jakarta.persistence.*;
-
 import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,8 +15,9 @@ public class User {
   public static final String TABLE_NAME = "users";
   public static final String IS_ACTIVE = "is_active";
 
-  @Column(name="user_id")
-  @Id private UUID id;
+  @Column(name = "user_id")
+  @Id
+  private UUID id;
 
   @Column(name = "first_name")
   private String firstname;

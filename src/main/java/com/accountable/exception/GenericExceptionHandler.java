@@ -1,6 +1,8 @@
 package com.accountable.exception;
 
 import java.time.OffsetDateTime;
+
+import com.accountable.response.GenericErrorResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

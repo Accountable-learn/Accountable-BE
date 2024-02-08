@@ -1,31 +1,28 @@
- package com.accountable.dto;
+package com.accountable.dto;
 
- import lombok.Getter;
- import lombok.NoArgsConstructor;
- import lombok.RequiredArgsConstructor;
- import lombok.Setter;
- import java.util.UUID;
+import java.util.UUID;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
- @NoArgsConstructor
- @Getter
- @Setter
- public class UserDto {
-     // Fields we got from Cognito
-     private UUID userId;
-     private String username;
-     private String email;
+@NoArgsConstructor
+@Getter
+@Setter
+public class UserDto {
+  // Fields we got from Cognito
+  private UUID userId;
+  private String username;
+  private String email;
 
-
-     private String firstname;
-     private String lastname;
-     private String displayName;
-     private String country;
-     private String role;
-     private String school;
-     private String classroom;
-     private String isAdmin;
- }
-
+  private String firstname;
+  private String lastname;
+  private String displayName;
+  private String country;
+  private String role;
+  private String school;
+  private String classroom;
+  private String isAdmin;
+}
 
 //  Json:
 //  {
@@ -33,5 +30,3 @@
 //     "username": "TonyTesting1"
 //     "email": "tonythetester@gmail.com"
 //   }
-
-
