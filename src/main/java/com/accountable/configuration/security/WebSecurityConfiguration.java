@@ -1,9 +1,8 @@
 package com.accountable.configuration.security;
 
+import com.accountable.repository.UserRepository;
 import java.util.Arrays;
 import java.util.List;
-
-import com.accountable.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +14,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -28,24 +26,26 @@ public class WebSecurityConfiguration {
 
   @Value("#{'${com.accountable.cors.allowedOrigins}'.split(',')}")
   private List<String> allowOrigins;
+
   private final UserRepository userRepo;
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     // https://stackoverflow.com/a/74688849
-    http
-        .cors(Customizer.withDefaults())
+    http.cors(Customizer.withDefaults())
         .csrf(AbstractHttpConfigurer::disable)
-        .authorizeHttpRequests(authorizeRequests -> authorizeRequests.anyRequest().authenticated())
-        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        .authorizeHttpRequests(authorizeRequests -> authorizeRequests.anyRequest().permitAll())
+        .sessionManagement(
+            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
     return http.build();
   }
 
-  @Bean
-  public JWTAuthenticationFilter jwtAuthenticationFilter() {
-    return new JWTAuthenticationFilter(userRepo);
-  }
+
+  // TODO: Uncomment this to add the filter
+  //  @Bean
+  //  public JWTAuthenticationFilter jwtAuthenticationFilter() {
+  //    return new JWTAuthenticationFilter(userRepo);
+  //  }
 
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
