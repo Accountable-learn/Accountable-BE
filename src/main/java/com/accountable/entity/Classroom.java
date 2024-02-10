@@ -1,3 +1,3 @@
-//package com.accountable.entity;
+// package com.accountable.entity;
 //
-//public class Classroom {}
+// public class Classroom {}
