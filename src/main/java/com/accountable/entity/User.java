@@ -1,10 +1,14 @@
 package com.accountable.entity;
 
+import com.accountable.enums.Role;
 import jakarta.persistence.*;
+import java.util.Collection;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
 
 @NoArgsConstructor
 @Getter
@@ -17,18 +21,14 @@ public class User {
 
   @Column(name = "user_id")
   @Id
+  @NonNull
   private UUID id;
-
-  @Column(name = "first_name")
-  private String firstname;
-
-  @Column(name = "last_name")
-  private String lastname;
 
   @Column(name = "display_name")
   private String displayName;
 
   @Column(name = "username")
+  @NonNull
   private String username;
 
   @Column(name = "email")
@@ -37,18 +37,19 @@ public class User {
   @Column(name = "country")
   private String country;
 
-  // TODO: figure out how to handle roles, abilities, and org...
   @Column(name = "role")
-  private String role;
+  @Enumerated(EnumType.STRING)
+  private Role role;
 
-  @Column(name = "school")
-  private String school;
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return role.getGrantedAuthorities();
+  }
 
-  @Column(name = "classroom")
-  private String classroom;
+  @Column(name = "school_id")
+  private String schoolId;
 
-  @Column(name = "is_admin")
-  private Boolean isAdmin;
+  @Column(name = "classroom_id")
+  private String classroomId;
 
   @Column(name = IS_ACTIVE)
   private Boolean isActive;

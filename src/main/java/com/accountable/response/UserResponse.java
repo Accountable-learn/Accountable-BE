@@ -1,14 +1,12 @@
 package com.accountable.response;
 
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
 public class UserResponse<T> extends CustomResponse {
-    T data;
-    List<GenericErrorResponse> errors;
+  T data;
+  List<GenericErrorResponse> errors;
 }
-

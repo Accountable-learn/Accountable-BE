@@ -1,16 +1,13 @@
 package com.accountable.response;
 
-import java.time.OffsetDateTime;
-
 import com.accountable.exception.ErrorCode;
+import java.time.OffsetDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-
-
 /***
- Object FE will get if exception is raised
+ * Object FE will get if exception is raised
  * */
 @Getter
 @Setter

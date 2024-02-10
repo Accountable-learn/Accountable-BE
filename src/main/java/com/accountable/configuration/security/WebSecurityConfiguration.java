@@ -40,7 +40,6 @@ public class WebSecurityConfiguration {
     return http.build();
   }
 
-
   // TODO: Uncomment this to add the filter
   //  @Bean
   //  public JWTAuthenticationFilter jwtAuthenticationFilter() {
