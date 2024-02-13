@@ -3,6 +3,7 @@ package com.accountable.entity;
 import com.accountable.enums.Role;
 import jakarta.persistence.*;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +23,7 @@ public class User {
   @Column(name = "user_id")
   @Id
   @NonNull
-  private UUID id;
+  private UUID userId;
 
   @Column(name = "display_name")
   private String displayName;
@@ -41,8 +42,9 @@ public class User {
   @Enumerated(EnumType.STRING)
   private Role role;
 
+  // for jackson - permissions fields
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return role.getGrantedAuthorities();
+    return role == null ? Collections.emptyList() : role.getGrantedAuthorities();
   }
 
   @Column(name = "school_id")

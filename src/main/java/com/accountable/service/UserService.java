@@ -1,6 +1,5 @@
 package com.accountable.service;
 
-import com.accountable.dto.UserDto;
 import com.accountable.entity.User;
 import com.accountable.exception.ErrorCode;
 import com.accountable.exception.GenericException;
@@ -12,31 +11,29 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class UserService {
 
   private final UserRepository userRepo;
 
+
+  // TODO: maybe use UserDto in the future to reduce number of fields exposed
   public User getUserById(UUID id) {
-    return userRepo.findUserByIdAndIsActiveTrue(id);
+      return userRepo.findUserByUserIdAndIsActiveTrue(id);
   }
 
-  // should only get called once every user
-  public UserDto create(UserDto userDto) {
-    if (null != getUserById(userDto.getUserId())) {
-      User newUser = new User();
-      newUser.setId(userDto.getUserId());
-      newUser.setEmail(userDto.getEmail());
-      newUser.setUsername(userDto.getUsername());
-      userRepo.saveAndFlush(newUser);
-      return userDto;
+
+
+  public User create(User user) {
+    // should only get called once every user
+    if (null == getUserById(user.getUserId())) {
+      return userRepo.saveAndFlush(user);
     } else {
       throw new GenericException(ErrorCode.USER_ON_ADD, "User already exists");
     }
   }
 
   public User update(User user) {
-    User currentUser = getUserById(user.getId());
+    User currentUser = getUserById(user.getUserId());
     if (null != currentUser) {
       return userRepo.saveAndFlush(currentUser);
     } else {

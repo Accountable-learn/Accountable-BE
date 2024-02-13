@@ -67,7 +67,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
   private void convertJwtToAuthToken(JWTClaimsSet claimsSet) throws ParseException {
     UUID userId = UUID.fromString(claimsSet.getSubject());
-    User user = userRepo.findUserByIdAndIsActiveTrue(userId);
+    User user = userRepo.findUserByUserIdAndIsActiveTrue(userId);
     Authentication auth = new UsernamePasswordAuthenticationToken(user, null);
     SecurityContextHolder.getContext().setAuthentication(auth);
   }
