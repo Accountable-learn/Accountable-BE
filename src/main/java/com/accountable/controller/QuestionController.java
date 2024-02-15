@@ -16,17 +16,17 @@ import org.springframework.web.bind.annotation.*;
 public class QuestionController extends AbstractResponse {
   private final QuestionService questionService;
 
-//  @GetMapping(path = "question")
-//  @PreAuthorize("hasAnyAuthority('student:read')")
-//  public ResponseEntity<Question> getRandQuestion() {
-//    return ResponseEntity.ok(questionService.getRandQuestion());
-//  }
-//
-//  @PostMapping(path = "question")
-//  @PreAuthorize("hasAnyAuthority('teacher:create')")
-//  public ResponseEntity<Question> createQuestion(@RequestBody Question question) {
-//    return ResponseEntity.ok(questionService.create(question));
-//  }
+  //  @GetMapping(path = "question")
+  //  @PreAuthorize("hasAnyAuthority('student:read')")
+  //  public ResponseEntity<Question> getRandQuestion() {
+  //    return ResponseEntity.ok(questionService.getRandQuestion());
+  //  }
+  //
+  //  @PostMapping(path = "question")
+  //  @PreAuthorize("hasAnyAuthority('teacher:create')")
+  //  public ResponseEntity<Question> createQuestion(@RequestBody Question question) {
+  //    return ResponseEntity.ok(questionService.create(question));
+  //  }
 
   // TODO: REMOVE THIS (only for testing purpose)
   @GetMapping(path = "question/testing")

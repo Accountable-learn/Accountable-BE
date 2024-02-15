@@ -6,7 +6,6 @@ import com.accountable.exception.GenericException;
 import com.accountable.repository.UserRepository;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,13 +14,10 @@ public class UserService {
 
   private final UserRepository userRepo;
 
-
   // TODO: maybe use UserDto in the future to reduce number of fields exposed
   public User getUserById(UUID id) {
-      return userRepo.findUserByUserIdAndIsActiveTrue(id);
+    return userRepo.findUserByUserIdAndIsActiveTrue(id);
   }
-
-
 
   public User create(User user) {
     // should only get called once every user
