@@ -20,6 +20,8 @@ RUN mvn package -DskipTests
 # Use Eclipse Temurin JRE for running the application in the final stage
 FROM eclipse-temurin:19-jre
 
+
+
 # Add a non-root user for running the application
 RUN addgroup --system spring && adduser --system --group spring
 USER spring:spring
@@ -31,5 +33,6 @@ COPY --from=build /app/target/*.jar /app.jar
 # Expose the application's port
 EXPOSE 8080/tcp
 
+ENV SPRING_PROFILES_ACTIVE=prod
 # Specify the entrypoint to run the application
 ENTRYPOINT ["java", "-jar", "/app.jar"]
