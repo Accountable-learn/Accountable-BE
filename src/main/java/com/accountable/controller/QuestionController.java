@@ -8,29 +8,38 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/questionService/")
 // @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER', 'STUDENT')")
 public class QuestionController extends AbstractResponse {
   private final QuestionService questionService;
 
-  //  @GetMapping(path = "question")
-  //  @PreAuthorize("hasAnyAuthority('student:read')")
-  //  public ResponseEntity<Question> getRandQuestion() {
-  //    return ResponseEntity.ok(questionService.getRandQuestion());
-  //  }
-  //
-  //  @PostMapping(path = "question")
-  //  @PreAuthorize("hasAnyAuthority('teacher:create')")
-  //  public ResponseEntity<Question> createQuestion(@RequestBody Question question) {
-  //    return ResponseEntity.ok(questionService.create(question));
-  //  }
+    @GetMapping(path = "questionGen/{questionNum}")
+//    @PreAuthorize("hasAnyAuthority('student:read')")
+    public ResponseEntity<CustomResponse> getRandQuestion(@PathVariable int questionNum) {
+      return okResponseEntity("Question generate successfully", questionService.getRandQuestions(questionNum));
+    }
+
+    @PostMapping(path = "question")
+//    @PreAuthorize("hasAnyAuthority('teacher:create')")
+    public ResponseEntity<CustomResponse> createQuestion(@RequestBody Question question) {
+      return okResponseEntity("Question created successfully", questionService.create(question));
+    }
+
+  @PostMapping(path = "questions/bulk")
+//    @PreAuthorize("hasAnyAuthority('teacher:create')")
+  public ResponseEntity<CustomResponse> createQuestion(@RequestBody List<Question> questions) {
+    return okResponseEntity("Questions created successfully", questionService.bulkCreate(questions));
+  }
+
 
   // TODO: REMOVE THIS (only for testing purpose)
   @GetMapping(path = "question/testing")
   //  @PreAuthorize("hasAnyAuthority('student:read')")
   public ResponseEntity<CustomResponse> testingFunction() {
-    return okResponseEntity("it is good", new Question("Hello", true));
+    return okResponseEntity("it is good", new Question("Hello"));
   }
 }

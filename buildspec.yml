@@ -9,8 +9,8 @@ phases:
       - IMAGE_TAG=${COMMIT_HASH}
       - REPO_URL=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME
 
-      - echo Fetching Dockerrun.aws.json file from s3
-      - aws s3 cp $JSON_FILE_PATH Dockerrun.aws.json
+#      - echo Fetching Dockerrun.aws.json file from s3
+#      - aws s3 cp $JSON_FILE_PATH Dockerrun.aws.json
   build:
     commands:
       - echo Building the Docker image...

@@ -8,14 +8,26 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class QuestionService {
   private final QuestionRepository questionRepository;
 
-  public Question getRandQuestion() {
-    return questionRepository.getRandomQuestion();
+  /**
+   * This method generate random questions.
+   *
+   * @param questionNum Number of questions to generate
+   * @return a list of questions
+   */
+  public List<Question> getRandQuestions(int questionNum) {
+    if (questionNum > 10) {
+      questionNum = 10;
+    }
+    return questionRepository.getRandomQuestion(questionNum);
   }
 
   public Question create(Question question) {
@@ -23,7 +35,15 @@ public class QuestionService {
       throw new GenericException(ErrorCode.QUESTION_ON_ADD, "Cannot have empty question");
     }
 
-    question.setIsActive(Boolean.TRUE);
+//    question.setIsActive(Boolean.TRUE);
     return questionRepository.saveAndFlush(question);
+  }
+
+  public List<Question> bulkCreate(List<Question> questions) {
+    List<Question> addedQuestions = new ArrayList<>();
+    for (Question question : questions) {
+      addedQuestions.add(create(question));
+    }
+    return addedQuestions;
   }
 }
