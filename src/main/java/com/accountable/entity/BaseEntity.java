@@ -37,7 +37,7 @@ public class BaseEntity implements Serializable {
         OffsetDateTime now = OffsetDateTime.now();
         this.createdAt = now;
         this.lastModified = now;
-        if (this.isActive == null) {
+        if (null == this.isActive) {
             this.isActive = Boolean.TRUE;
         }
     }

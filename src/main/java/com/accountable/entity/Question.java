@@ -1,12 +1,12 @@
 package com.accountable.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.checkerframework.checker.units.qual.C;
 
 import java.util.UUID;
 
@@ -16,25 +16,34 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = Question.TABLE_NAME)
+// not extends AbstractUuidEntity because we don't need metadata
 public class Question {
   public static final String TABLE_NAME = "questions";
 
-  @Id
-  @Column(name = "id")
-  private UUID id;
-
-  public Question (String questions){
-    this.questionText = questions;
+  public Question(String questionText){
+    this.questionText = questionText;
   }
 
-  // each class will have all the org questions as default
-  @Column(name = "school_id")
-  private UUID orgId;
-
-  @Column(name = "classroom_id")
-  private UUID classroomId;
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  @Column(
+          name = "id",
+          updatable = false,
+          nullable = false,
+          columnDefinition = "uuid default uuid_generate_v4()")
+  private UUID id;
 
   @Column(name = "question_text")
   @NotNull
   private String questionText;
+
+  @ManyToOne
+  @JoinColumn(name = "question_bank_id", referencedColumnName = "id")
+  @JsonIgnore
+  private QuestionBank questionBank;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "questions_answers_id")
+  @JsonIgnore
+  private QuestionsAnswers questionsAnswers;
 }

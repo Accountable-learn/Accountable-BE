@@ -13,12 +13,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
+
+// TODO: Needs to add some counting metrics
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
 @Table(name = User.TABLE_NAME)
-public class User{
+public class User extends BaseEntity{
   public static final String TABLE_NAME = "users";
 
   @Column(name = "user_id")

@@ -5,6 +5,8 @@ import com.accountable.exception.ErrorCode;
 import com.accountable.exception.GenericException;
 import com.accountable.repository.UserRepository;
 import java.util.UUID;
+
+import com.accountable.utilities.EntityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +32,9 @@ public class UserService {
 
   public User update(User user) {
     User currentUser = getUserById(user.getUserId());
+    User patchedUser = EntityUtils.mergeEntitiesDelta(currentUser, user);
     if (null != currentUser) {
-      return userRepo.saveAndFlush(currentUser);
+      return userRepo.saveAndFlush(patchedUser);
     } else {
       throw new GenericException(ErrorCode.USER_ON_ADD, "Error while updating users");
     }
