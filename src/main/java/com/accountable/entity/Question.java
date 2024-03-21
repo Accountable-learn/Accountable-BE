@@ -10,6 +10,10 @@ import lombok.Setter;
 
 import java.util.UUID;
 
+
+/*
+* One question must associate with one question bank
+* */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -37,13 +41,14 @@ public class Question {
   @NotNull
   private String questionText;
 
-  @ManyToOne
-  @JoinColumn(name = "question_bank_id", referencedColumnName = "id")
-  @JsonIgnore
-  private QuestionBank questionBank;
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "questions_answers_id")
-  @JsonIgnore
-  private QuestionsAnswers questionsAnswers;
+//  @ManyToOne
+//  @JoinColumn(name = "question_bank_id", referencedColumnName = "id")
+//  @JsonIgnore
+//  @NotNull
+//  private QuestionBank questionBank;
+//
+//  @ManyToOne(fetch = FetchType.LAZY)
+//  @JoinColumn(name = "questions_answers_id")
+//  @JsonIgnore
+//  private QuestionsAnswers questionsAnswers;
 }

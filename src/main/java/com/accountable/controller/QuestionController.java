@@ -17,21 +17,22 @@ import java.util.List;
 public class QuestionController extends AbstractResponse {
   private final QuestionService questionService;
 
+  @PostMapping(path = "question/create")
+//    @PreAuthorize("hasAnyAuthority('teacher:create')")
+  public ResponseEntity<CustomResponse> createQuestion(@RequestBody Question question) {
+    return okResponseEntity("Question created successfully", questionService.create(question));
+  }
+
     @GetMapping(path = "questionGen/{questionNum}")
-//    @PreAuthorize("hasAnyAuthority('student:read')")
+  //    @PreAuthorize("hasAnyAuthority('student:read')")
     public ResponseEntity<CustomResponse> getRandQuestion(@PathVariable int questionNum) {
       return okResponseEntity("Question generate successfully", questionService.getRandQuestions(questionNum));
     }
 
-    @PostMapping(path = "question/create")
-//    @PreAuthorize("hasAnyAuthority('teacher:create')")
-    public ResponseEntity<CustomResponse> createQuestion(@RequestBody Question question) {
-      return okResponseEntity("Question created successfully", questionService.create(question));
-    }
 
-  @PostMapping(path = "questions/bulk")
+  @PatchMapping(path = "questions/bulk")
 //    @PreAuthorize("hasAnyAuthority('teacher:create')")
-  public ResponseEntity<CustomResponse> createQuestion(@RequestBody List<Question> questions) {
+  public ResponseEntity<CustomResponse> createQuestions(@RequestBody List<Question> questions) {
     return okResponseEntity("Questions created successfully", questionService.bulkCreate(questions));
   }
 

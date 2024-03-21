@@ -47,12 +47,15 @@ public class OrganizationService {
 
     }
 
-    public Organization delete(Organization organization){
-        Organization existingOrg = get(organization.getId());
+
+    // TODO: Consider make isActive false to preserve user data instead of hard delete
+    public Organization delete(UUID orgId){
+        Organization existingOrg = get(orgId);
         if (null == existingOrg){
             throw new GenericException(ErrorCode.ORG_ON_UPDATE, "Org does not exist");
         }
-        return orgRepo.saveAndFlush(organization);
+        orgRepo.delete(existingOrg);
+        return existingOrg;
     }
 
 

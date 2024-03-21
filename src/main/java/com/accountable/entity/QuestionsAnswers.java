@@ -22,9 +22,10 @@ public class QuestionsAnswers extends AbstractUuidEntity{
     @Column(name = "user_id")
     private UUID userId;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "questionsAnswers")
-    @ToString.Exclude
-    private List<Question> questions;
+    // Probably go with json
+    //    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "questionsAnswers")
+    //    @ToString.Exclude
+    //    private List<Question> questions;
 
     @Column(name = "answers", columnDefinition = "jsonb")
     private String answers;

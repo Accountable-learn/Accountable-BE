@@ -29,16 +29,16 @@ public class QuestionBank extends AbstractUuidEntity{
     @Column(name = "name")
     private String name;
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "quesetion_ids")
+    private List<Question> questions;
+
+    @Column(name = "is_public")
+    private Boolean isPublic;
+
     // TODO: Add tags in the future for filtering
     //    @ElementCollection
     //    @CollectionTable(name = "question_bank_tags", joinColumns = @JoinColumn(name = "question_bank_id"))
     //    @Column(name = "tag")
     //    private Set<String> tags = new HashSet<>();
-
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "questionBank")
-    private List<Question> questions;
-
-    @Column(name = "is_public")
-    private Boolean isPublic;
 }
