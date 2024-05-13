@@ -1,18 +1,17 @@
 package com.accountable.entity;
 
 import com.accountable.enums.Role;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.UUID;
-
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
-
 
 // TODO: Needs to add some counting metrics
 @NoArgsConstructor
@@ -20,16 +19,14 @@ import org.springframework.security.core.GrantedAuthority;
 @Setter
 @Entity
 @Table(name = User.TABLE_NAME)
-public class User extends BaseEntity{
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
+public class User extends BaseEntity {
   public static final String TABLE_NAME = "users";
 
   @Column(name = "user_id")
   @Id
   @NotNull
   private UUID userId;
-
-  @Column(name = "org_id")
-  private UUID orgId;
 
   @Column(name = "display_name")
   private String displayName;
@@ -48,8 +45,20 @@ public class User extends BaseEntity{
   @Enumerated(EnumType.STRING)
   private Role role;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "org_id", referencedColumnName = "id", nullable = false)
+  @ToString.Exclude
+  @JsonIgnore
+  private Organization organization;
+
   // for jackson - permissions fields
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return role == null ? Collections.emptyList() : role.getGrantedAuthorities();
+  }
+
+  @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+  @JsonProperty("organization")
+  public Organization getOrganization() {
+    return organization;
   }
 }

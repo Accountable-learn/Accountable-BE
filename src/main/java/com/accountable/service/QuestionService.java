@@ -4,12 +4,11 @@ import com.accountable.entity.Question;
 import com.accountable.exception.ErrorCode;
 import com.accountable.exception.GenericException;
 import com.accountable.repository.QuestionRepository;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +34,7 @@ public class QuestionService {
       throw new GenericException(ErrorCode.QUESTION_ON_ADD, "Cannot have empty question");
     }
 
-//    question.setIsActive(Boolean.TRUE);
+    //    question.setIsActive(Boolean.TRUE);
     return questionRepository.saveAndFlush(question);
   }
 

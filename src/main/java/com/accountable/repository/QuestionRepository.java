@@ -1,7 +1,6 @@
 package com.accountable.repository;
 
 import com.accountable.entity.Question;
-
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
