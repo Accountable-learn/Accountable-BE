@@ -12,11 +12,11 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @MappedSuperclass
-public abstract class AbstractUuidEntity {
+public abstract class AbstractUuidEntity extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   @Column(
-      name = Question.ID_COL_NAME,
+      name = "id",
       updatable = false,
       nullable = false,
       columnDefinition = "uuid default uuid_generate_v4()")

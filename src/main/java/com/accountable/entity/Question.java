@@ -1,27 +1,51 @@
 package com.accountable.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/*
+ * One question must associate with one question bank
+ * */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Entity
 @Table(name = Question.TABLE_NAME)
-public class Question extends AbstractUuidEntity {
-  // TODO: Extends AbstractUuidEntity class
+// not extends AbstractUuidEntity because we don't need metadata
+public class Question {
   public static final String TABLE_NAME = "questions";
-  public static final String ID_COL_NAME = "question_uuid";
-  public static final String QUESTION_TEXT = "question_text";
-  public static final String IS_ACTIVE = "is_active";
 
-  @Column(name = QUESTION_TEXT)
+  public Question(String questionText) {
+    this.questionText = questionText;
+  }
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  @Column(
+      name = "id",
+      updatable = false,
+      nullable = false,
+      columnDefinition = "uuid default uuid_generate_v4()")
+  private UUID id;
+
+  @Column(name = "question_text")
+  @NotNull
   private String questionText;
 
-  @Column(name = IS_ACTIVE)
-  private Boolean isActive;
+  //  @ManyToOne
+  //  @JoinColumn(name = "question_bank_id", referencedColumnName = "id")
+  //  @JsonIgnore
+  //  @NotNull
+  //  private QuestionBank questionBank;
+  //
+  //  @ManyToOne(fetch = FetchType.LAZY)
+  //  @JoinColumn(name = "questions_answers_id")
+  //  @JsonIgnore
+  //  private QuestionsAnswers questionsAnswers;
 }

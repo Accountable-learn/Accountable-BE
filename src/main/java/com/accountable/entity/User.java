@@ -1,35 +1,38 @@
 package com.accountable.entity;
 
 import com.accountable.enums.Role;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 
+// TODO: Needs to add some counting metrics
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
 @Table(name = User.TABLE_NAME)
-public class User {
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
+public class User extends BaseEntity {
   public static final String TABLE_NAME = "users";
-  public static final String IS_ACTIVE = "is_active";
 
   @Column(name = "user_id")
   @Id
-  @NonNull
+  @NotNull
   private UUID userId;
 
   @Column(name = "display_name")
   private String displayName;
 
   @Column(name = "username")
-  @NonNull
+  @NotNull
   private String username;
 
   @Column(name = "email")
@@ -42,17 +45,20 @@ public class User {
   @Enumerated(EnumType.STRING)
   private Role role;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "org_id", referencedColumnName = "id", nullable = false)
+  @ToString.Exclude
+  @JsonIgnore
+  private Organization organization;
+
   // for jackson - permissions fields
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return role == null ? Collections.emptyList() : role.getGrantedAuthorities();
   }
 
-  @Column(name = "school_id")
-  private String schoolId;
-
-  @Column(name = "classroom_id")
-  private String classroomId;
-
-  @Column(name = IS_ACTIVE)
-  private Boolean isActive;
+  @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+  @JsonProperty("organization")
+  public Organization getOrganization() {
+    return organization;
+  }
 }
